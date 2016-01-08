@@ -1,2 +1,2 @@
 # linkedList
-Full doubly-linked-list implementation
+Full implementation of a doubly-linked-list.

@@ -3,9 +3,6 @@
 #include "linkedList.hpp"
 
 
-int main() {
-  return 0;
-}
 
 
 
@@ -25,14 +22,19 @@ linkedList ll_create() {
 
   // Return a pointer to the new linked list
   return list;
-}
+
+} // End of ll_create
+
+
 
 
 
 // Get the length of the linked list
 int ll_length(linkedList list) {
   return list->length;
-}
+} // End of ll_length
+
+
 
 
 
@@ -83,21 +85,28 @@ bool ll_checkLength(linkedList list) {
     // The list's length is incorrect
     return false;
   }
-}
+
+} // End of ll_checkLength
+
+
 
 
 
 // Access the item stored in the head node
 int ll_getHeadNodeItem(linkedList list) {
   return list->head->item;
-}
+} // End of ll_getHeadNodeItem
+
+
 
 
 
 // Access the item stored in the tail node
 int ll_getTailNodeItem(linkedList list) {
   return list->tail->item;
-}
+} // End of ll_getTailNodeItem
+
+
 
 
 
@@ -129,10 +138,13 @@ void ll_insertNodeHead(linkedList list, int data) {
   // Increment the list's length
   list->length++;
 
-}
+} // End of ll_insertNodeHead
 
 
 
+
+
+// Insert node at tail of the linked list
 void ll_insertNodeTail(linkedList list, int data) {
   // Create new node "newNode" and allocate enough space in memory
   node newNode = (node)malloc(sizeof(node_t));
@@ -159,14 +171,14 @@ void ll_insertNodeTail(linkedList list, int data) {
 
   // Increment the list's length
   list->length++;
-}
+
+} // End of ll_insertNodeTail
 
 
 
 
 
-// Check to see if the linked list is sorted in ascending order
-// Lowest to highest
+// Check to see if the linked list is sorted in ascending order (low to high)
 bool ll_isSortedAscending(linkedList list) {
 
   // If the list has zero or one nodes
@@ -174,10 +186,14 @@ bool ll_isSortedAscending(linkedList list) {
     return true;
   }
 
-  currentNode = currentNode->next;
+  // Set the current node to the tail of the list
+  node currentNode = list->tail;
 
+  // Loop through the entire linked list
   while (currentNode != NULL) {
+    // If the current node's item is greater than or equal to the next node's item
     if (currentNode->item >= currentNode->previous->item) {
+      // Advance to the next node
       currentNode = currentNode->next;
     }
     else {
@@ -186,12 +202,14 @@ bool ll_isSortedAscending(linkedList list) {
   }
 
   return true;
-}
+
+} // End of ll_isSortedAscending
 
 
 
-// Check to see if the linked list is sorted in descending order
-// Highest to lowest
+
+
+// Check to see if the linked list is sorted in descending order (high to low)
 bool ll_isSortedDescending(linkedList list) {
 
   // If the list has zero or one nodes
@@ -199,12 +217,14 @@ bool ll_isSortedDescending(linkedList list) {
     return true;
   }
 
+  // Set the current node to the head of the list
   node currentNode = list->head;
 
-  currentNode = currentNode->previous;
-
+  // Loop through the entire linked list
   while (currentNode != NULL) {
+    // If the current node's item is greater than or equal to the next node's item
     if (currentNode->item >= currentNode->next->item) {
+      // Advance to the previous node
       currentNode = currentNode->previous;
     }
     else {
@@ -213,24 +233,30 @@ bool ll_isSortedDescending(linkedList list) {
   }
 
   return true;
-}
+
+} // End of ll_isSortedDescending
+
+
 
 
 
 // Insert node in list
 // Assumes that list is sorted from least to greatest value
 void ll_insertNodeAscending(linkedList list, int data) {
+
+  // Create new node and allocate space
   node newNode = (node)malloc(sizeof(node_t));
   assert(newNode != NULL);
 
+  // Assign data to the node's item
   newNode->item = data;
 
   // If the linked list is empty
   if (list->length == 0) {
     newNode->previous = NULL;
-    newNode->next = NULL;
-    list->head = newNode;
-    list->tail = newNode;
+    newNode->next     = NULL;
+    list->head        = newNode;
+    list->tail        = newNode;
     list->length++;
   }
   else {
@@ -239,12 +265,15 @@ void ll_insertNodeAscending(linkedList list, int data) {
     currentNode = list->tail;
     nextNode = currentNode->next;
 
+    // Loop through the entire linked list
     while (currentNode != NULL) {
+      // If the current node's item is less than or equal to the tail's item
       if (currentNode == list->tail && newNode->item <= currentNode->item) {
         // insert node at tail of list
         ll_insertNodeTail(list, data);
         break;
       }
+      // If the current node's item is greater than the head's item
       else if (currentNode == list->head && newNode->item > currentNode->item) {
         // insert node at end of list
         ll_insertNodeHead(list, data);
@@ -252,9 +281,9 @@ void ll_insertNodeAscending(linkedList list, int data) {
       }
       // If insertion is in the middle of the linked list
       else if (newNode->item >= currentNode->item && newNode->item <= nextNode->item) {
-        newNode->previous = currentNode;
-        newNode->next = nextNode;
-        currentNode->next = newNode;
+        newNode->previous  = currentNode;
+        newNode->next      = nextNode;
+        currentNode->next  = newNode;
         nextNode->previous = newNode;
         list->length++;
         break;
@@ -265,7 +294,8 @@ void ll_insertNodeAscending(linkedList list, int data) {
       }
     }
   }
-}
+} // End of ll_insertNodeAscending
+
 
 
 
@@ -281,23 +311,25 @@ void ll_insertNodeDescending(linkedList list, int data) {
   // If the linked list is empty
   if (list->length == 0) {
     newNode->previous = NULL;
-    newNode->next = NULL;
-    list->head = newNode;
-    list->tail = newNode;
+    newNode->next     = NULL;
+    list->head        = newNode;
+    list->tail        = newNode;
     list->length++;
   }
   else {
     node previousNode, currentNode;
 
-    currentNode = list->head;
+    currentNode  = list->head;
     previousNode = currentNode->previous;
 
     while (currentNode != NULL) {
+      // If the current node's item is less than or equal to the tail's item
       if (currentNode == list->tail && newNode->item <= currentNode->item) {
         // Insert node at tail of list
         ll_insertNodeTail(list, data);
         break;
       }
+      // If the current node's item is greater than the head's item
       else if (currentNode == list->head && newNode->item > currentNode->item) {
         // Insert node at end of list
         ll_insertNodeHead(list, data);
@@ -305,56 +337,68 @@ void ll_insertNodeDescending(linkedList list, int data) {
       }
       // If insertion is in the middle of the linked list
       else if (newNode->item <= currentNode->item && newNode->item >= previousNode->item) {
-        newNode->next = currentNode;
-        newNode->previous = previousNode;
+        newNode->next         = currentNode;
+        newNode->previous     = previousNode;
         currentNode->previous = newNode;
-        previousNode->next = newNode;
+        previousNode->next    = newNode;
         list->length++;
         break;
       }
       else {
-        currentNode = previousNode;
+        currentNode  = previousNode;
         previousNode = currentNode->previous;
       }
     }
   }
-}
+} // End of ll_insertNodeDescending
+
 
 
 
 
 // Locate the first node that contains "data" (tail to head)
 node ll_findNodeAscending(linkedList list, int data) {
+
+  // Start searching at the list's tail
   node currentNode = list->tail;
 
+  // Loop through the the entire linked list
   while (currentNode != NULL) {
+    // If the current node's item matches the desired data
     if (currentNode->item == data) {
       return currentNode;
     }
     else {
+      // Otherwise, advance to the next node
       currentNode = currentNode->next;
     }
   }
-
   return NULL;
-}
+} // End of ll_indNodeAscending
+
+
+
+
 
 // Locate the first node that contains "data" (head to tail)
 node ll_findNodeDescending(linkedList list, int data) {
+
+  // Start searching at the list's head
   node currentNode = list->head;
 
+  // Loop through the entire linked list
   while (currentNode != NULL) {
+    // If the current node's item matches the desired data
     if (currentNode->item == data) {
       return currentNode;
     }
     else {
+      // Otherwise, advance to the previous node
       currentNode = currentNode->previous;
     }
   }
-
   return NULL;
-}
-
+} // End of ll_findNodeDescending
 
 
 
@@ -362,28 +406,35 @@ node ll_findNodeDescending(linkedList list, int data) {
 
 // Print linked list in ascending order (i.e. tail to head)
 void ll_printAscending(linkedList list) {
+
+  // Start printing the linked list at the tail
   node nodeToPrint = list->tail;
 
+  // Loop through the entire linked list
   while (nodeToPrint != NULL) {
     printf("%i ", nodeToPrint->item);
     nodeToPrint = nodeToPrint->next;
   }
   printf("\n");
-}
+} // End of ll_printAscending
+
+
+
+
 
 // Print linked list in descending order (i.e. head to tail)
 void ll_printDescending(linkedList list) {
+
+  // Start printing the linked list at the head
   node nodeToPrint = list->head;
 
+  // Loop through the entire linked list
   while (nodeToPrint != NULL) {
     printf("%i ", nodeToPrint->item);
     nodeToPrint = nodeToPrint->previous;
   }
   printf("\n");
-}
-
-
-
+} // End of ll_printDescending
 
 
 
@@ -392,38 +443,54 @@ void ll_printDescending(linkedList list) {
 // Remove head node
 void ll_removeNodeHead(linkedList list) {
 
+  // If the linked list's length is zero, do nothing
   if (list->length == 0) {
     return;
   }
 
+  // Set the head node as the node to delete
   node nodeToDelete = list->head;
 
+  // Set the node just before the head node as the new head
   list->head = list->head->previous;
   list->head->next = NULL;
 
+  // Free the memory used by the deleted node
   free(nodeToDelete);
 
+  // Decrement the linked list's length by one
   list->length--;
-}
+
+} // End of ll_removeNodeHead
+
+
 
 
 
 // Remove tail node
 void ll_removeNodeTail(linkedList list) {
 
+  // If the linked list's length is zero do nothing
   if (list->length == 0) {
     return;
   }
 
+  // Set the node just after the tail node as the new tail
   node nodeToDelete = list->tail;
 
+  // Set the node just after the tail node's
   list->tail = list->tail->next;
   list->tail->previous = NULL;
 
+  // Free the memory used by the deleted node
   free(nodeToDelete);
 
+  // Decrement the linked list's length by one
   list->length--;
-}
+
+} // End of ll_removeNodeTail
+
+
 
 
 
@@ -443,7 +510,9 @@ void ll_removeNode(linkedList list, node nodeToDelete) {
 
     list->length--;
   }
-}
+} // End of ll_removeNode
+
+
 
 
 
@@ -452,7 +521,7 @@ void ll_removeLinkedList(linkedList list) {
   // Create temporary nodes current and next
   node current, next;
 
-  // Assign the current node to the head o the list
+  // Assign the current node to the head of the list
   current = list->head;
 
   // Loop through the entire linked list
@@ -470,6 +539,10 @@ void ll_removeLinkedList(linkedList list) {
   // Free the memory assigned to the linked list
   free(list);
 
-}
+} // End of ll_remoeLinkedList
+
+
+
+
 
 // That's all folks!
